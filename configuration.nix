@@ -10,6 +10,8 @@
      pkgs.git
      pkgs.dig
    ];
+
+   programs.fish.enable;
    
    fileSystems."/" = {
      device = "/dev/disk/by-label/nixos";
@@ -36,6 +38,7 @@
    users.users = {
      root.hashedPassword = "!"; # Disable root login
      jason = {
+       shell = pkgs.fish;
        isNormalUser = true;
        extraGroups = [ "wheel" ];
        openssh.authorizedKeys.keys = [
