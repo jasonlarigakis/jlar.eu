@@ -10,8 +10,6 @@
      pkgs.git
      pkgs.dig
    ];
-
-   programs.fish.enable;
    
    fileSystems."/" = {
      device = "/dev/disk/by-label/nixos";
@@ -35,6 +33,8 @@
    boot.loader.grub.device = "/dev/sda";
    boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" "ext4" ];
    
+   programs.fish.enable = true;
+
    users.users = {
      root.hashedPassword = "!"; # Disable root login
      jason = {
