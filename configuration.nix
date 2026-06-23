@@ -28,6 +28,8 @@
      }
    ];
    
+   environment.variables.EDITOR = "vim";
+
    time.timeZone = "Europe/London";
    i18n.defaultLocale = "en_US.UTF-8";
    console.keyMap = "us";
@@ -37,6 +39,11 @@
    boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" "ext4" ];
    
    programs.fish.enable = true;
+   programs.git.enable = true;
+   programs.git.config = {
+     user.name = "Jason Larigakis";
+     user.email = "jason@thessaly.ca";
+   };
 
    users.users = {
      root.hashedPassword = "!"; # Disable root login
