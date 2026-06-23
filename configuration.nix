@@ -5,10 +5,12 @@
      experimental-features = "nix-command flakes";
    };
    
-   environment.systemPackages = [
+   environment.systemPackages = with inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}; [
      pkgs.vim
      pkgs.git
      pkgs.dig
+     pi
+     claude-code
    ];
    
    fileSystems."/" = {
