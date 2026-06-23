@@ -4,7 +4,7 @@
      llm-agents.url = "github:numtide/llm-agents.nix";
    };
  
-   outputs = { nixpkgs, ... }: {
+   outputs = { self, nixpkgs, llm-agents, ... }@inputs: {
      nixosConfigurations = {
        enki = nixpkgs.lib.nixosSystem {
          system = "x86_64-linux";
