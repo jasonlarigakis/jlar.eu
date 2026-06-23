@@ -8,6 +8,7 @@
      nixosConfigurations = {
        enki = nixpkgs.lib.nixosSystem {
          system = "x86_64-linux";
+         specialArgs = { inherit inputs; };   # makes `inputs` available in modules
          modules = [
            ./configuration.nix
          ];
