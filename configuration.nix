@@ -1,4 +1,4 @@
- { pkgs, inputs, hostName, ... }:
+ { pkgs, inputs, hostName, ipv6Address ? null, lib, ... }:
  
  {
    nix.settings = {
@@ -71,6 +71,24 @@
    networking.hostName = hostName;
    networking.domain = "jlar.eu";
    networking.firewall.allowedTCPPorts = [ 22 ];
+
+   # IPv6: statically assign the ::1 of this host's Hetzner /64, mirroring what
+   # Ubuntu's cloud-init configures from the Hetzner metadata service. The /64
+   # is on-link and the gateway is the link-local fe80::1.
+   networking.useDHCP = true;
+   networking.interfaces.enp1s0.ipv6.addresses =
+     lib.optional (ipv6Address != null) {
+       address = ipv6Address;
+       prefixLength = 64;
+     };
+   networking.defaultGateway6 = lib.optionalAttrs (ipv6Address != null) {
+     address = "fe80::1";
+     interface = "enp1s0";
+   };
+   networking.nameservers = [
+     "185.12.64.2" "185.12.64.1"
+     "2a01:4ff:ff00::add:2" "2a01:4ff:ff00::add:1"
+   ];
    
    system.stateVersion = "24.11";
  }

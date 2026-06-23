@@ -6,17 +6,18 @@
  
    outputs = { self, nixpkgs, llm-agents, ... }@inputs:
  let
-   mkNixos = name: nixpkgs.lib.nixosSystem {
-     system = "x86_64-linux";
-     specialArgs = { inherit inputs; hostName = name; };
-     modules = [
-       ./configuration.nix
-     ];
-   };
+   mkNixos = name: ipv6Address:
+     nixpkgs.lib.nixosSystem {
+       system = "x86_64-linux";
+       specialArgs = { inherit inputs; hostName = name; ipv6Address = ipv6Address; };
+       modules = [
+         ./configuration.nix
+       ];
+     };
  in {
    nixosConfigurations = {
-     enki = mkNixos "enki";
-     utu = mkNixos "utu";
+     enki = mkNixos "enki" "2a01:4f9:c012:7e2c::1";
+     utu = mkNixos "utu" "2a01:4f9:c012:3826::1";
    };
  };
 }
