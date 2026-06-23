@@ -60,6 +60,8 @@
      };
    };
    
+   networking.hostName = "enki";
+   networking.domain = "jlar.eu";
    networking.firewall.allowedTCPPorts = [ 22 ];
    
    system.stateVersion = "24.11";
