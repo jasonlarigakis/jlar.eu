@@ -9,6 +9,7 @@
      pkgs.vim
      pkgs.git
      pkgs.dig
+     pkgs.tmux
      pi
      claude-code
    ];
