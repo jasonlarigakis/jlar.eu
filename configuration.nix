@@ -1,6 +1,11 @@
  { pkgs, ... }:
  
  {
+   inputs = {
+    llm-agents.url = "github:numtide/llm-agents.nix";
+   };
+
+
    nix.settings = {
      experimental-features = "nix-command flakes";
    };
