@@ -1,6 +1,7 @@
  {
    inputs = {
      nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+     llm-agents.url = "github:numtide/llm-agents.nix";
    };
  
    outputs = { nixpkgs, ... }: {
