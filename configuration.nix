@@ -1,4 +1,4 @@
- { pkgs, inputs, ... }:
+ { pkgs, inputs, hostName, ... }:
  
  {
    nix.settings = {
@@ -68,7 +68,7 @@
      };
    };
    
-   networking.hostName = "enki";
+   networking.hostName = hostName;
    networking.domain = "jlar.eu";
    networking.firewall.allowedTCPPorts = [ 22 ];
    

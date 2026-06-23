@@ -4,15 +4,19 @@
      llm-agents.url = "github:numtide/llm-agents.nix";
    };
  
-   outputs = { self, nixpkgs, llm-agents, ... }@inputs: {
-     nixosConfigurations = {
-       enki = nixpkgs.lib.nixosSystem {
-         system = "x86_64-linux";
-         specialArgs = { inherit inputs; };   # makes `inputs` available in modules
-         modules = [
-           ./configuration.nix
-         ];
-       };
-     };
+   outputs = { self, nixpkgs, llm-agents, ... }@inputs:
+ let
+   mkNixos = name: nixpkgs.lib.nixosSystem {
+     system = "x86_64-linux";
+     specialArgs = { inherit inputs; hostName = name; };
+     modules = [
+       ./configuration.nix
+     ];
    };
- }
+ in {
+   nixosConfigurations = {
+     enki = mkNixos "enki";
+     utu = mkNixos "utu";
+   };
+ };
+}
