@@ -1,7 +1,24 @@
- { pkgs, inputs, hostName, ipv6Address ? null, lib, ... }:
+ { pkgs, inputs, hostName, lib, ... }:
  
- {
-   nix.settings = {
+let
+  hetznerSetIpv6 = pkgs.writeShellScript "hetzner_set_ipv6.sh" (builtins.readFile ./hetzner_set_ipv6.sh);
+in {
+
+  systemd.services.hetzner-set-ipv6 = {
+    description = "Configure IPv6 from Hetzner Cloud metadata";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = with pkgs; [ curl iproute2 gawk ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${hetznerSetIpv6}";
+      User = "root";
+      RemainAfterExit = true; # don't re-run on every boot after activation
+    };
+  };
+
+  nix.settings = {
      experimental-features = "nix-command flakes";
    };
    
@@ -65,7 +82,6 @@
    services.openssh = {
      enable = true;
      settings = {
-       PermitRootLogin = "no";
        PasswordAuthentication = false;
        KbdInteractiveAuthentication = false;
      };
@@ -75,22 +91,9 @@
    networking.domain = "jlar.eu";
    networking.firewall.allowedTCPPorts = [ 22 ];
 
-   # IPv6: statically assign the ::1 of this host's Hetzner /64, mirroring what
-   # Ubuntu's cloud-init configures from the Hetzner metadata service. The /64
-   # is on-link and the gateway is the link-local fe80::1.
    networking.useDHCP = true;
-   networking.interfaces.enp1s0.ipv6.addresses =
-     lib.optional (ipv6Address != null) {
-       address = ipv6Address;
-       prefixLength = 64;
-     };
-   networking.defaultGateway6 = lib.optionalAttrs (ipv6Address != null) {
-     address = "fe80::1";
-     interface = "enp1s0";
-   };
    networking.nameservers = [
      "185.12.64.2" "185.12.64.1"
-     "2a01:4ff:ff00::add:2" "2a01:4ff:ff00::add:1"
    ];
    
    system.stateVersion = "24.11";

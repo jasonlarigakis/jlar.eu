@@ -8,10 +8,10 @@
  
    outputs = { self, nixpkgs, llm-agents, disko, ... }@inputs:
  let
-   mkNixos = name: ipv6Address:
+   mkNixos = name:
      nixpkgs.lib.nixosSystem {
        system = "x86_64-linux";
-       specialArgs = { inherit inputs; hostName = name; ipv6Address = ipv6Address; };
+       specialArgs = { inherit inputs; hostName = name; };
        modules = [
          disko.nixosModules.disko
          ./disko.nix
@@ -20,8 +20,8 @@
      };
  in {
    nixosConfigurations = {
-     enki = mkNixos "enki" "2a01:4f9:c012:7e2c::1";
-     utu = mkNixos "utu" "2a01:4f9:c012:3826::1";
+     enki = mkNixos "enki";
+     utu = mkNixos "utu";
    };
  };
 }
